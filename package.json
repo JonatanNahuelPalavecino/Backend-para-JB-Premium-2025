@@ -4,7 +4,9 @@
   "description": "Servidor para E-commerce JB Premium",
   "main": "dist/index.js",
   "scripts": {
-    "dev": "tsnd --respawn --clear src/index.ts"
+    "dev": "tsnd --respawn --clear src/index.ts",
+    "build": "rimraf ./dist && tsc",
+    "start": "node dist/index.js"
   },
   "author": "Jonatan Palavecino",
   "license": "ISC",
