@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "tsnd --respawn --clear src/index.ts",
     "build": "rimraf ./dist && tsc",
-    "start": "node dist/index.js"
+    "start": "npx prisma migrate deploy && node dist/index.js"
   },
   "author": "Jonatan Palavecino",
   "license": "ISC",
