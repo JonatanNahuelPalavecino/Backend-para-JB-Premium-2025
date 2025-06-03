@@ -1,0 +1,112 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Order {
+  orderId        String   @id
+  fecha_creacion DateTime @default(now())
+  userId         Int?
+  direccion      String
+  localidad      String
+  provincia      String
+  telefono       String
+  codigoPostal   String
+  total          Float
+  link_pago      String   @default("")
+  estado         String   @default("pending")
+
+  user          Users?       @relation(fields: [userId], references: [userId], onDelete: SetNull)
+  items         ItemsOrder[]
+  transactions  Transactions[]
+}
+
+model ItemsOrder {
+  id         Int @id @default(autoincrement())
+  orderId    String
+  productoId Int?
+  nombre     String
+  cantidad   Int
+  precio     Float
+
+  order     Order    @relation(fields: [orderId], references: [orderId], onDelete: Cascade)
+  product   Products? @relation(fields: [productoId], references: [productoId], onDelete: SetNull)
+}
+
+model Products {
+  productoId Int @id @default(autoincrement())
+  nombre              String
+  precio              Float
+  stock_disponible    Int
+  stock_total         Int
+  activo              Boolean @default(true)
+  accesorio           Boolean
+  porcDesc            Int
+  destacado           Boolean
+  promocion           Boolean @default(false)
+  fotoPromo           String @default("")
+  foto                String
+  bodega              String
+  cosecha             String
+  region              String
+  crianza             String
+  descUno             String
+  descDos             String
+  faseGus             String
+  faseOlf             String
+  faseVis             String
+  grado               String
+  maridaje            String
+  temp                String
+  tipo                String
+  ubicacion           String
+  vino                String
+  detalle             String @default("")
+  pdf                 String @default("")
+
+  items      ItemsOrder[]
+}
+
+model Transactions {
+  id             Int @id @default(autoincrement())
+  transaccionId  BigInt @unique
+  orderId        String
+  tarjeta        String
+  tipoDeTarjeta  String
+  estado         String
+  detalleDelPago String
+  pagoRecibido   Float
+  pagoBruto      Float
+
+  order          Order @relation(fields: [orderId], references: [orderId], onDelete: Cascade)
+}
+
+model Users {
+  userId    Int     @id @default(autoincrement())
+  rol       String  @default("user")
+  email     String  @unique
+  password  String
+  nombre    String
+  apellido  String
+  edad      Int
+  activo    Boolean @default(true)
+
+  orders    Order[]
+  visitas  Visitas[]
+}
+
+model Visitas {
+  id         Int      @id @default(autoincrement())
+  ip         String
+  user_agent String
+  ruta       String
+  fecha      DateTime @default(now())
+  userId     Int?
+  referer    String?
+
+  user       Users?   @relation(fields: [userId], references: [userId], onDelete: SetNull)
+}
