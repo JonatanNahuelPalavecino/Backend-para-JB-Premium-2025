@@ -1,4 +1,6 @@
 export const createBodyPreference = (totalCompra: number, orderId: string) => ({
+
+
     items: [
       {
         id: "1",
@@ -11,9 +13,9 @@ export const createBodyPreference = (totalCompra: number, orderId: string) => ({
       },
     ],
     back_urls: {
-      success: "http://localhost:5173/pago-realizado",
-      failure: "http://localhost:5173/pago-rechazado",
-      pending: "http://localhost:5173/pago-pendiente",
+      success: `${process.env.URL_FRONTEND}/pago-realizado`,
+      failure: `${process.env.URL_FRONTEND}/pago-rechazado`,
+      pending: `${process.env.URL_FRONTEND}/pago-pendiente`,
     },
     notification_url: `${process.env.URL_SERVER}/transactions/webhook`,
     payment_methods: {
@@ -22,7 +24,7 @@ export const createBodyPreference = (totalCompra: number, orderId: string) => ({
       installments: 12,
     },
     external_reference: orderId,
-    // auto_return: "approved"
+    auto_return: "approved"
     //No usar hasta que los URLS de las back_urls sean https
   });
   
